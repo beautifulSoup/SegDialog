@@ -15,7 +15,6 @@ public abstract class ViewItemHolder extends BaseItemHolder {
         mView = view;
     }
 
-
     @Override
     public View createView(LayoutInflater inflater, ViewGroup parent) {
         return mView;

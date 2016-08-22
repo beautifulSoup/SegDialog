@@ -1,13 +1,21 @@
 package com.tangotkk.segdialog.sample;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.tangotkk.segdialog.builder.DialogBuilder;
+import com.tangotkk.segdialog.holder.LayoutItemHolder;
+import com.tangotkk.segdialog.holder.ViewItemHolder;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,8 +30,70 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                View textView = LayoutInflater.from(MainActivity.this).inflate(R.layout.item_text, null, false);
+                new DialogBuilder(MainActivity.this)
+                        .addItem(new LayoutItemHolder(R.layout.item_title) {
+                            @Override
+                            public void onViewClick(Dialog dialog, View view) {
+                                showShortToast("Title clicked");
+                            }
+
+                            @Override
+                            public View createView(LayoutInflater inflater, ViewGroup parent) {
+                                View view = super.createView(inflater, parent);
+                                TextView tv = (TextView) view.findViewById(R.id.title_tv);
+                                tv.setText("SegDialog sample");
+                                return view;
+                            }
+
+
+
+                        })
+                        .addItem(new ViewItemHolder(textView) {
+                            @Override
+                            public void onViewClick(Dialog dialog, View view) {
+                                showShortToast("Text clicked");
+                            }
+
+                            @Override
+                            public View createView(LayoutInflater inflater, ViewGroup parent) {
+                                View view =  super.createView(inflater, parent);
+                                TextView tv = (TextView) view.findViewById(R.id.content_tv);
+                                tv.setText("SegDialog text");
+                                return view;
+                            }
+                        })
+                        .addItem(new LayoutItemHolder(R.layout.item_footer) {
+                            @Override
+                            public void onViewClick(Dialog dialog, View view) {
+                                showShortToast("footer clicked");
+                            }
+
+                            @Override
+                            public void bindEvent(final Dialog dialog, View view) {
+                                super.bindEvent(dialog, view);
+                                View  left = view.findViewById(R.id.left_btn);
+                                View right = view.findViewById(R.id.right_btn);
+                                left.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        showShortToast("Cancel");
+                                        dialog.dismiss();
+                                    }
+                                });
+                                right.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        showShortToast("Confirm");
+                                        dialog.dismiss();
+                                    }
+                                });
+                            }
+                        })
+                        .setBackgroundRes(R.drawable.dialog_back)
+                        .setHorizontalMargin(0, 0)
+                        .buildAndShow();
+
             }
         });
     }
@@ -48,5 +118,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void showShortToast(String text){
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 }
