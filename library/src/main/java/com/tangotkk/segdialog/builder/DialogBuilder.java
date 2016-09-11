@@ -1,8 +1,8 @@
 package com.tangotkk.segdialog.builder;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
@@ -31,10 +31,10 @@ public class DialogBuilder {
 
     int mMarginRight = -1;
 
-    WeakReference<Activity> mARef;
+    WeakReference<Context> mARef;
 
-    public DialogBuilder(Activity activity){
-        mARef = new WeakReference<Activity>(activity);
+    public DialogBuilder(Context context){
+        mARef = new WeakReference<Context>(context);
     }
 
     public DialogBuilder addItem(ItemHolder item){
